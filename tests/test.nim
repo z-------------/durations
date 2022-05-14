@@ -1,17 +1,17 @@
 import durations
 import std/unittest
 
-template checkTypeAndCount(expr: untyped; expectedType: typedesc; expectedCount: Count) =
+template checkTypeAndCount(expr, expected: untyped) =
   let d = expr
-  check d is expectedType
-  check d.count == expectedCount
+  check d is typeof(expected)
+  check d.count == expected.count
 
 test "arithmetic":
-  checkTypeAndCount(6.seconds + 9.seconds, Seconds, 15)
-  checkTypeAndCount(5.seconds + 100.milliseconds, Milliseconds, 5100)
+  checkTypeAndCount(6.seconds + 9.seconds, 15.seconds)
+  checkTypeAndCount(5.seconds + 100.milliseconds, 5100.milliseconds)
 
-  checkTypeAndCount(6.seconds - 9.seconds, Seconds, -3)
-  checkTypeAndCount(5.seconds - 100.milliseconds, Milliseconds, 4900)
+  checkTypeAndCount(6.seconds - 9.seconds, (-3).seconds)
+  checkTypeAndCount(5.seconds - 100.milliseconds, 4900.milliseconds)
 
 test "conversions":
   check 5.seconds.to(Milliseconds).count == 5000
