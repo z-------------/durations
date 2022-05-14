@@ -5,7 +5,7 @@ import std/genasts
 func generateInit(typeName, ratioType: NimNode): NimNode =
   let initProcName = ident("init" & $typeName)
   genAst(initProcName, ratioType, typeName):
-    func initProcName*(count: CountType): typeName =
+    func initProcName*(count: Count): typeName =
       initDuration[ratioType](count)
 
 func generateDollar(typeName: NimNode): NimNode =
