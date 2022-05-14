@@ -11,13 +11,13 @@ template getInitName(typeName: NimNode): NimNode =
 
 func generateInit(typeName, ratio: NimNode): NimNode =
   genAst(name = getInitName(typeName), typeName, ratio):
-    func name*(count: Count): typeName =
+    func name*(count {.inject.}: Count): typeName =
       initDuration[ratio](count)
 
 func generateInitSugar(typeName: NimNode): NimNode =
   let name = ident(($typeName).toLowerAscii)
   genAst(name, initName = getInitName(typeName), typeName):
-    template name*(count: Count): typeName =
+    template name*(count {.inject.}: Count): typeName =
       initName(count)
 
 func generateInits(typeName, ratio: NimNode): seq[NimNode] =
@@ -27,7 +27,7 @@ func generateInits(typeName, ratio: NimNode): seq[NimNode] =
 func generateDollar(typeName: NimNode): NimNode =
   let typeNameLower = newLit(($typeName).toLowerAscii)
   genAst(typeName, typeNameLower):
-    func `$`*(d: typeName): string =
+    func `$`*(d {.inject.}: typeName): string =
       $d.count & ' ' & typeNameLower
 
 macro generateDeclsFromTypes*(typeSectionStmtList: untyped): untyped =
