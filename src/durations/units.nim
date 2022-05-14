@@ -1,10 +1,15 @@
 import ./core
 import std/macros
 import std/genasts
+import std/math
+
+func generateType(typeName, ratioType: NimNode): NimNode =
+  genAst(typeName, ratioType):
+    type typeName* = Duration[ratioType]
 
 func generateInit(typeName, ratioType: NimNode): NimNode =
   let initProcName = ident("init" & $typeName)
-  genAst(initProcName, ratioType, typeName):
+  genAst(initProcName, typeName, ratioType):
     func initProcName*(count: Count): typeName =
       initDuration[ratioType](count)
 
@@ -13,24 +18,43 @@ func generateDollar(typeName: NimNode): NimNode =
     func `$`*(d: typeName): string =
       $typeName & "(" & $d.count & ")"
 
-macro generateProcs(typeSectionStmtList: untyped): untyped =
+macro generateDeclsFromTypes(typeSectionStmtList: untyped): untyped =
   typeSectionStmtList.expectKind(nnkStmtList)
   result = newStmtList()
   result.add(typeSectionStmtList)
+
   let typeSection = typeSectionStmtList[0]
+  typeSection.expectKind(nnkTypeSection)
+
   for typeDef in typeSection:
     let
       typeName = typeDef[0][1]
-      ratioType = typeDef[2][1]
-    result.add(generateInit(typeName, ratioType))
+      ratio = typeDef[2][1]
+    result.add(generateInit(typeName, ratio))
     result.add(generateDollar(typeName))
 
-const
-  Milli* = initRatio(1, 1000)
+macro generateDecls(constSectionStmtList: untyped): untyped =
+  constSectionStmtList.expectKind(nnkStmtList)
+  result = newStmtList()
+  result.add(constSectionStmtList)
 
-generateProcs:
+  let constSection = constSectionStmtList[0]
+  constSection.expectKind(nnkConstSection)
+
+  for constDef in constSection:
+    let
+      ratio = constDef[0][1]
+      typeName = ident($ratio & "seconds")
+    result.add(generateType(typeName, ratio))
+    result.add(generateInit(typeName, ratio))
+    result.add(generateDollar(typeName))
+
+generateDeclsFromTypes:
   type
-    Milliseconds* = Duration[Milli]
     Seconds* = Duration[initRatio(1, 1)]
 
-# TODO generate the Duration types, incl. their associated procs, from the Ratio consts
+generateDecls:
+  const
+    Nano* = initRatio(1, 10 ^ 9)
+    Micro* = initRatio(1, 10 ^ 6)
+    Milli* = initRatio(1, 10 ^ 3)
