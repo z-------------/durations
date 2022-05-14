@@ -41,3 +41,12 @@ func `+`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): auto =
 
 func `-`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): auto =
   arithImpl(d1, d2, a - b)
+
+func `*`*[R](d: Duration[R]; n: SomeInteger): Duration[R] =
+  initDuration[R](d.count * n)
+
+func `*`*[R; N: SomeFloat](d: Duration[R]; n: N): Duration[R] =
+  initDuration[R]((d.count.N * n).Count)
+
+func `*`*[R](n: SomeNumber; d: Duration[R]): Duration[R] =
+  d * n
