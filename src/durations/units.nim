@@ -2,16 +2,29 @@ import ./core
 import std/macros
 import std/genasts
 import std/math
+import std/strutils
 
-func generateType(typeName, ratioType: NimNode): NimNode =
-  genAst(typeName, ratioType):
-    type typeName* = Duration[ratioType]
+func generateType(typeName, ratio: NimNode): NimNode =
+  genAst(typeName, ratio):
+    type typeName* = Duration[ratio]
 
-func generateInit(typeName, ratioType: NimNode): NimNode =
-  let initProcName = ident("init" & $typeName)
-  genAst(initProcName, typeName, ratioType):
-    func initProcName*(count: Count): typeName =
-      initDuration[ratioType](count)
+template getInitName(typeName: NimNode): NimNode =
+  ident("init" & $typeName)
+
+func generateInit(typeName, ratio: NimNode): NimNode =
+  genAst(name = getInitName(typeName), typeName, ratio):
+    func name*(count: Count): typeName =
+      initDuration[ratio](count)
+
+func generateInitSugar(typeName: NimNode): NimNode =
+  let name = ident(($typeName).toLowerAscii)
+  genAst(name, initName = getInitName(typeName), typeName):
+    template name*(count: Count): typeName =
+      initName(count)
+
+func generateInits(typeName, ratio: NimNode): seq[NimNode] =
+  result.add(generateInit(typeName, ratio))
+  result.add(generateInitSugar(typeName))
 
 func generateDollar(typeName: NimNode): NimNode =
   genAst(typeName):
@@ -30,7 +43,7 @@ macro generateDeclsFromTypes(typeSectionStmtList: untyped): untyped =
     let
       typeName = typeDef[0][1]
       ratio = typeDef[2][1]
-    result.add(generateInit(typeName, ratio))
+    result.add(generateInits(typeName, ratio))
     result.add(generateDollar(typeName))
 
 macro generateDecls(constSectionStmtList: untyped): untyped =
@@ -46,7 +59,7 @@ macro generateDecls(constSectionStmtList: untyped): untyped =
       ratio = constDef[0][1]
       typeName = ident($ratio & "seconds")
     result.add(generateType(typeName, ratio))
-    result.add(generateInit(typeName, ratio))
+    result.add(generateInits(typeName, ratio))
     result.add(generateDollar(typeName))
 
 generateDeclsFromTypes:
