@@ -27,9 +27,10 @@ func generateInits(typeName, ratio: NimNode): seq[NimNode] =
   result.add(generateInitSugar(typeName))
 
 func generateDollar(typeName: NimNode): NimNode =
-  genAst(typeName):
+  let typeNameLower = newLit(($typeName).toLowerAscii)
+  genAst(typeName, typeNameLower):
     func `$`*(d: typeName): string =
-      $typeName & "(" & $d.count & ")"
+      $d.count & ' ' & typeNameLower
 
 macro generateDeclsFromTypes(typeSectionStmtList: untyped): untyped =
   typeSectionStmtList.expectKind(nnkStmtList)

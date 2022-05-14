@@ -19,7 +19,7 @@ test "conversions":
   check 3500.milliseconds.to(Milliseconds).count == 3500
 
 test "dollars":
-  check $5.seconds == "Seconds(5)"
-  check $5.milliseconds == "Milliseconds(5)"
-  check $initDuration[Milli](5) == "Milliseconds(5)"
+  check $5.seconds == "5 seconds"
+  check $5.milliseconds == "5 milliseconds"
+  check $initDuration[Milli](5) == "5 milliseconds"
   check $initDuration[initRatio(22, 7)](5) == "Duration[22/7](5)"
