@@ -1,0 +1,8 @@
+*
+!**/
+!*.*
+
+*.exe
+*.swp
+.vscode
+nimcache
