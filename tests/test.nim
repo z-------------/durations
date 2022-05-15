@@ -1,5 +1,6 @@
-import durations
 import std/unittest
+import durations
+import ./funcs
 
 template checkTypeAndCount(expr, expected: untyped) =
   let d = expr
@@ -47,3 +48,6 @@ test "dollars":
   check $5.milliseconds == "5 milliseconds"
   check $initDuration[Milli](5) == "5 milliseconds"
   check $initDuration[initRatio(22, 7)](5) == "Duration[22/7](5)"
+
+test "no implicit conversion unless enabled":
+  check not compiles(getCountMilli(5.seconds))
