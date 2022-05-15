@@ -25,7 +25,7 @@ func to*[R1, R2](d: Duration[R1]; outType: typedesc[Duration[R2]]): Duration[R2]
     const conversion = R1 / R2.Ratio # ???
     result.count = (d.count * conversion).toCount
 
-template arithImpl[R1, R2](d1: Duration[R1]; d2: Duration[R2]; arithExpr: untyped): untyped =
+template operatorImpl[R1, R2](d1: Duration[R1]; d2: Duration[R2]; expression: untyped; wrap = false): untyped =
   const commonRatio =
     when R2 < R1:
       R2
@@ -34,7 +34,13 @@ template arithImpl[R1, R2](d1: Duration[R1]; d2: Duration[R2]; arithExpr: untype
   let
     a {.inject.} = d1.to(Duration[commonRatio]).count
     b {.inject.} = d2.to(Duration[commonRatio]).count
-  initDuration[commonRatio](arithExpr)
+  when wrap:
+    initDuration[commonRatio](expression)
+  else:
+    expression
+
+template arithImpl[R1, R2](d1: Duration[R1]; d2: Duration[R2]; expression: untyped): untyped =
+  operatorImpl(d1, d2, expression, true)
 
 func `+`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): auto =
   arithImpl(d1, d2, a + b)
@@ -50,3 +56,12 @@ func `*`*[R; N: SomeFloat](d: Duration[R]; n: N): Duration[R] =
 
 func `*`*[R](n: SomeNumber; d: Duration[R]): Duration[R] =
   d * n
+
+func `==`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): bool =
+  operatorImpl(d1, d2, a == b)
+
+func `<=`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): bool =
+  operatorImpl(d1, d2, a <= b)
+
+func `<`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): bool =
+  operatorImpl(d1, d2, a < b)

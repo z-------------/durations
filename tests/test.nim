@@ -18,6 +18,25 @@ test "arithmetic":
   checkTypeAndCount(25.milliseconds * 3.5, 87.milliseconds)
   checkTypeAndCount(3.5 * 25.milliseconds, 87.milliseconds)
 
+test "comparisons":
+  check 6.seconds != 5.seconds
+  check 6.seconds > 5.seconds
+  check 6.seconds >= 5.seconds
+  check 5.seconds >= 5.seconds
+  check 5.seconds == 5.seconds
+  check 5.seconds <= 5.seconds
+  check 4.seconds <= 5.seconds
+  check 4.seconds < 5.seconds
+  check 4.seconds != 5.seconds
+
+  check not (6.seconds == 5.seconds)
+  check not (6.seconds < 5.seconds)
+  check not (6.seconds <= 5.seconds)
+  check not (5.seconds != 5.seconds)
+  check not (4.seconds >= 5.seconds)
+  check not (4.seconds > 5.seconds)
+  check not (4.seconds == 5.seconds)
+
 test "conversions":
   check 5.seconds.to(Milliseconds).count == 5000
   check 3500.milliseconds.to(Seconds).count == 3
