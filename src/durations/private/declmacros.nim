@@ -2,12 +2,12 @@ import std/genasts
 import std/macros
 import std/strutils
 
+template getInitName(typeName: NimNode): NimNode =
+  ident("init" & $typeName)
+
 func generateType(typeName, ratio: NimNode): NimNode =
   genAst(typeName, ratio):
     type typeName* = Duration[ratio]
-
-template getInitName(typeName: NimNode): NimNode =
-  ident("init" & $typeName)
 
 func generateInit(typeName, ratio: NimNode): NimNode =
   genAst(name = getInitName(typeName), typeName, ratio):
@@ -20,15 +20,15 @@ func generateInitSugar(typeName: NimNode): NimNode =
     template name*(count {.inject.}: Count): typeName =
       initName(count)
 
-func generateInits(typeName, ratio: NimNode): seq[NimNode] =
-  result.add(generateInit(typeName, ratio))
-  result.add(generateInitSugar(typeName))
-
 func generateDollar(typeName: NimNode): NimNode =
   let typeNameLower = newLit(($typeName).toLowerAscii)
   genAst(typeName, typeNameLower):
     func `$`*(d {.inject.}: typeName): string =
       $d.count & ' ' & typeNameLower
+
+func generateInits(typeName, ratio: NimNode): seq[NimNode] =
+  result.add(generateInit(typeName, ratio))
+  result.add(generateInitSugar(typeName))
 
 macro generateDeclsFromTypes*(typeSectionStmtList: untyped): untyped =
   typeSectionStmtList.expectKind(nnkStmtList)
