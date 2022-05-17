@@ -71,6 +71,18 @@ func `*`*[R; N: SomeFloat](d: Duration[R]; n: N): Duration[R] =
 func `*`*[R](n: SomeNumber; d: Duration[R]): Duration[R] =
   d * n
 
+func `div`*[R](d: Duration[R]; n: SomeInteger): Duration[R] =
+  initDuration[R](d.count div n)
+
+func `div`*[R; N: SomeFloat](d: Duration[R]; n: N): Duration[R] =
+  initDuration[R]((d.count.N / n).Count)
+
+func `div`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): Count =
+  operatorImpl(d1, d2, a div b)
+
+func `/`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): float =
+  operatorImpl(d1, d2, a.float / b.float)
+
 func `==`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): bool =
   operatorImpl(d1, d2, a == b)
 

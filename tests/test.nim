@@ -7,6 +7,9 @@ template checkTypeAndCount(expr, expected: untyped) =
   check d is typeof(expected)
   check d.count == expected.count
 
+template `=~`(a, b: float): bool =
+  abs(a - b) < 0.000001
+
 test "arithmetic":
   checkTypeAndCount(6.seconds + 9.seconds, 15.seconds)
   checkTypeAndCount(5.seconds + 100.milliseconds, 5100.milliseconds)
@@ -18,6 +21,12 @@ test "arithmetic":
   checkTypeAndCount(3 * 25.milliseconds, 75.milliseconds)
   checkTypeAndCount(25.milliseconds * 3.5, 87.milliseconds)
   checkTypeAndCount(3.5 * 25.milliseconds, 87.milliseconds)
+
+  checkTypeAndCount(20.seconds div 4, 5.seconds)
+  checkTypeAndCount(21.seconds div 4, 5.seconds)
+  checkTypeAndCount(100.milliseconds div 3.3, 30.milliseconds)
+  check 100.seconds div 33.milliseconds == 3030
+  check 100.seconds / 33.milliseconds =~ 100_000 / 33
 
 test "comparisons":
   check 6.seconds != 5.seconds
