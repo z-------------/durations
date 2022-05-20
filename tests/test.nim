@@ -28,6 +28,8 @@ test "arithmetic":
   check 100.seconds div 33.milliseconds == 3030
   check 100.seconds / 33.milliseconds =~ 100_000 / 33
 
+  checkTypeAndCount(1.hours + 59.minutes, (60 + 59).minutes)
+
 test "comparisons":
   check 6.seconds != 5.seconds
   check 6.seconds > 5.seconds
@@ -38,6 +40,10 @@ test "comparisons":
   check 4.seconds <= 5.seconds
   check 4.seconds < 5.seconds
   check 4.seconds != 5.seconds
+
+  check 1000.milliseconds == 1.seconds
+  check 240.minutes == 4.hours
+  check 4.hours > 239.minutes
 
   check not (6.seconds == 5.seconds)
   check not (6.seconds < 5.seconds)
@@ -55,6 +61,7 @@ test "conversions":
 test "dollars":
   check $5.seconds == "5 seconds"
   check $5.milliseconds == "5 milliseconds"
+  check $2.hours == "2 hours"
   check $initDuration[Milli](5) == "5 milliseconds"
   check $initDuration[initRatio(22, 7)](5) == "Duration[22/7](5)"
 

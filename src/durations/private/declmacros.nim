@@ -75,17 +75,12 @@ func generateInits(typeName, ratioName: NimNode): seq[NimNode] =
   result.add generateInit(typeName, ratioName)
   result.add generateInitSugar(typeName)
 
-macro unit*(name: untyped; ratio: static[Ratio]): untyped =
+macro unit*(ratioName, typeName: untyped; ratio: static[Ratio]): untyped =
   result = newStmtList()
-  let typeName =
-    if name.eqIdent("Unit"):
-      ident("Seconds")
-    else:
-      ident(name.strVal & "seconds")
-  result.add generateConst(name, ratio)
-  result.add generateType(typeName, name)
-  result.add generateInits(typeName, name)
+  result.add generateConst(ratioName, ratio)
+  result.add generateType(typeName, ratioName)
+  result.add generateInits(typeName, ratioName)
   result.add generateDollar(typeName)
 
-  units[ratio] = name
+  units[ratio] = ratioName
 

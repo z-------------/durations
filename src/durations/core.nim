@@ -14,6 +14,8 @@
 
 import std/rationals
 
+export rationals.`*`
+
 type
   Count* = int64
   Ratio* = Rational[Count]
