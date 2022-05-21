@@ -34,7 +34,7 @@ let timeToSleepInMs = 1000.milliseconds
 sleep(timeToSleepInMs)
 ```
 
-compilation will fail with a type mismatch error:
+compilation fails with a type mismatch error:
 
 ```
 Error: type mismatch: got <Milliseconds>
@@ -45,10 +45,9 @@ proc sleep(duration: Microseconds)
   but expression 'initMilliseconds(1000)' is of type: Milliseconds
 ```
 
-To be able to call the procedure, you must ensure your arguments are in the correct units. The following will compile and sleep for the correct amount of time:
+To be able to call the procedure, you must ensure your arguments are in the correct units. The following compiles and sleeps for the correct amount of time:
 
 ```nim
-let timeToSleepInMs = 1000.milliseconds
 sleep(timeToSleepInMs.to(Microseconds))
 ```
 
@@ -56,13 +55,6 @@ If you find the manual conversion cumbersome, you can compile your program with 
 
 ```nim
 sleep(timeToSleepInMs)
-```
-
-and the following still fails to compile, since nanoseconds are smaller than microseconds:
-
-```nim
-let timeToSleepInNs = 1_000_000_000.nanoseconds
-sleep(timeToSleepInNs)
 ```
 
 This library also has all the expected arithmetic and comparison operators, as well as a nice `$`:
@@ -75,7 +67,7 @@ echo 1.seconds + 250.milliseconds # prints "1250 milliseconds"
 
 Duration types are implemented as instantiations of the generic type `Duration[R: static[Ratio]]`, where `Ratio` is a rational number. For example, `Seconds` is `Duration[initRatio(1, 1)]` and `Milliseconds` is `Duration[initRatio(1, 1000)]`.
 
-The library comes with several units built in, from `Nanoseconds` up to `Days`.
+The library comes with several units built in, including `Nanoseconds` and `Days`.
 
 You can define a custom duration type by simply saying:
 
