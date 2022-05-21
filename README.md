@@ -4,7 +4,7 @@ Statically typed durations for Nim.
 
 ## What and why
 
-Let's say you have a procedure that takes a duration in microseconds as an argument:
+Say you have a procedure that takes a duration in microseconds as an argument:
 
 ```nim
 proc sleep(duration: int) =
@@ -71,18 +71,21 @@ This library also has all the expected arithmetic and comparison operators, as w
 echo 1.seconds + 250.milliseconds # prints "1250 milliseconds"
 ```
 
+## Custom units
+
+Duration types are implemented as instantiations of the generic type `Duration[R: static[Ratio]]`, where `Ratio` is a rational number. For example, `Seconds` is `Duration[initRatio(1, 1)]` and `Milliseconds` is `Duration[initRatio(1, 1000)]`.
+
+The library comes with several units built in, from `Nanoseconds` up to `Days`.
+
+You can define a custom duration type by simply saying:
+
+```nim
+type
+  Megaseconds = Duration[initRatio(1_000_000, 1)]
+```
+
+and use it wherever `Duration` is accepted.
+
 ## License
 
-Copyright 2022 Zack Guard
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+Apache License, Version 2.0. See LICENSE.
