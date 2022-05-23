@@ -1,5 +1,7 @@
 # durations
 
+[![Pipeline status](https://gitlab.com/z-------------/durations/badges/master/pipeline.svg)](https://gitlab.com/z-------------/durations/pipelines)
+
 Statically typed durations for Nim.
 
 ## What and why

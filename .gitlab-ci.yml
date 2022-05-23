@@ -19,7 +19,7 @@ pages:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   script:
-    - nim doc --project --outdir:public src/durations
+    - nim doc --project --git.url:"$CI_PROJECT_URL" --git.commit:"$CI_COMMIT_SHA" --git.devel:"$CI_DEFAULT_BRANCH" --outdir:public src/durations
     - cp public/theindex.html public/index.html
   artifacts:
     paths:
