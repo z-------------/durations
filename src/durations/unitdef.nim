@@ -12,9 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-## This module contains the `unit` and `generateImplicitConverters` macros for
-## defining new units. You don't need to import it unless you want to define
-## your own custom units.
+## This module contains the macros for defining new units. You don't need to
+## import it unless you want to define your own custom units.
 
 import ./core
 import std/[
