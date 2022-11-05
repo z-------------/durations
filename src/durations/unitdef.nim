@@ -12,13 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import ../core
-import std/genasts
-import std/macros
-import std/rationals
-import std/sequtils
-import std/strutils
-import std/tables
+## This module contains the `unit` and `generateImplicitConverters` macros for
+## defining new units. You don't need to import it unless you want to define
+## your own custom units.
+
+import ./core
+import std/[
+  genasts,
+  macros,
+  rationals,
+  sequtils,
+  strutils,
+  tables,
+]
 
 var units {.compileTime.}: Table[Ratio, NimNode]
 
@@ -83,4 +89,3 @@ macro unit*(ratioName, typeName: untyped; ratio: static[Ratio]): untyped =
   result.add generateDollar(typeName)
 
   units[ratio] = ratioName
-

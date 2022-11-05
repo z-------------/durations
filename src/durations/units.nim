@@ -1,5 +1,5 @@
 import ./core
-import ./private/declmacros
+import ./unitdef
 import std/math
 
 unit Nano, Nanoseconds, initRatio(1, 10 ^ 9)
