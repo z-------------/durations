@@ -79,10 +79,10 @@ func generateInits(typeName, ratioName: NimNode): seq[NimNode] =
 
 macro unit*(ratioName, typeName: untyped; ratio: static[Ratio]): untyped =
   result = newStmtList()
+
   result.add generateConst(ratioName, ratio)
   result.add generateType(typeName, ratioName)
   result.add generateInits(typeName, ratioName)
   result.add generateDollar(typeName)
-
   when defined(durationsImplicitConversion):
     result.add generateImplicitConverters(ratio, ratioName)

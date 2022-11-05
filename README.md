@@ -13,7 +13,7 @@ proc sleep(duration: int) =
   discard usleep(duration.cuint)
 ```
 
-You don't know by looking at the parameter types what unit `duration` is supposed to be in, and there is nothing stopping you from passing the wrong unit. The following will sleep for 1000 *microseconds*, not milliseconds as intended:
+You can't tell what unit `duration` is supposed to be in from the parameter types, and there is nothing stopping you from passing the wrong unit. The following will sleep for 1000 *microseconds*, not milliseconds as intended:
 
 ```nim
 let timeToSleepInMs = 1000
@@ -71,14 +71,18 @@ Duration types are implemented as instantiations of the generic type `Duration[R
 
 The library comes with several units built in, including `Nanoseconds` and `Days`.
 
-You can define a custom duration type by simply saying:
+You can define a custom duration type with:
 
 ```nim
-type
-  Megaseconds = Duration[initRatio(1_000_000, 1)]
+unit Mega, Megaseconds, initRatio(1_000_000, 1)
 ```
 
-and use it wherever `Duration` is accepted.
+This generates:
+
+* a concrete `Duration` type with the specified ratio
+* `initMegaseconds(n)` and `n.megaseconds` initializers
+* `const Mega: Ratio` set to the specified ratio
+* implicit converters as described above if enabled
 
 ## License
 
