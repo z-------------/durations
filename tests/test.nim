@@ -67,3 +67,7 @@ test "dollars":
 
 test "no implicit conversion unless enabled":
   check not compiles(getCountMilli(5.seconds))
+
+test "initializers":
+  check 42.seconds == initSeconds(42)
+  check Seconds.init(42) == initSeconds(42)

@@ -40,6 +40,8 @@ func generateInit(typeName, ratioName: NimNode): NimNode =
   genAst(name = getInitName(typeName), typeName, ratioName):
     func name*(count {.inject.}: Count): typeName =
       initDuration[ratioName](count)
+    func init*(_ {.inject.}: typedesc[typeName]; count {.inject.}: Count): typeName =
+      initDuration[ratioName](count)
 
 func generateInitSugar(typeName: NimNode): NimNode =
   let name = ident(($typeName).toLowerAscii)
