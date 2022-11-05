@@ -9,5 +9,3 @@ unit Unit, Seconds, initRatio(1, 1)
 unit MinuteRatio, Minutes, initRatio(60, 1)
 unit HourRatio, Hours, MinuteRatio * 60
 unit DayRatio, Days, HourRatio * 24
-
-generateImplicitConverters()

@@ -5,7 +5,6 @@ import ./funcs
 
 unit Deca, Decaseconds, initRatio(10, 1)
 unit Hecto, Hectoseconds, initRatio(100, 1)
-generateImplicitConverters()
 
 func getCountDeca(d: Decaseconds): Count =
   d.count

@@ -26,8 +26,6 @@ import std/[
   tables,
 ]
 
-var units {.compileTime.}: Table[Ratio, NimNode]
-
 template getInitName(typeName: NimNode): NimNode =
   ident("init" & $typeName)
 
@@ -57,25 +55,24 @@ func generateDollar(typeName: NimNode): NimNode =
       $d.count & ' ' & typeNameLower
 
 when defined(durationsImplicitConversion):
-  import std/enumerate
+  var units {.compileTime.}: Table[Ratio, NimNode]
 
   func generateConverter(name: NimNode; R1, R2: NimNode): NimNode =
     genAst(name, R1, R2):
       converter name*(d {.inject.}: Duration[R1]): Duration[R2] =
         d.to(Duration[R2])
 
-  macro generateImplicitConverters*(): untyped =
-    result = newStmtList()
-    for i, r1 in enumerate(units.keys):
-      for j, r2 in enumerate(units.keys):
-        let
-          name1 = units[r1]
-          name2 = units[r2]
-        if i != j and r1 >= r2:
-          let converterName = ident("implicit" & name1.strVal & "To" & name2.strVal)
-          result.add generateConverter(converterName, name1, name2)
-else:
-  macro generateImplicitConverters*() = discard
+  proc generateImplicitConverter(name1, name2: NimNode): NimNode =
+    let converterName = ident("implicit" & name1.strVal & "To" & name2.strVal)
+    generateConverter(converterName, name1, name2)
+
+  proc generateImplicitConverters(ratio: Ratio; ratioName: NimNode): seq[NimNode] =
+    for r1, name1 in units.pairs:
+      if r1 >= ratio:
+        result.add generateImplicitConverter(name1, ratioName)
+      if ratio >= r1:
+        result.add generateImplicitConverter(ratioName, name1)
+    units[ratio] = ratioName
 
 func generateInits(typeName, ratioName: NimNode): seq[NimNode] =
   result.add generateInit(typeName, ratioName)
@@ -88,4 +85,5 @@ macro unit*(ratioName, typeName: untyped; ratio: static[Ratio]): untyped =
   result.add generateInits(typeName, ratioName)
   result.add generateDollar(typeName)
 
-  units[ratio] = ratioName
+  when defined(durationsImplicitConversion):
+    result.add generateImplicitConverters(ratio, ratioName)
