@@ -96,3 +96,17 @@ func `<=`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): bool =
 
 func `<`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): bool =
   operatorImpl(d1, d2, a < b)
+
+func ceil*[R1, R2](d: Duration[R1]; To: typedesc[Duration[R2]]): Duration[R2] =
+  let conv = d.to(Duration[R2])
+  if conv < d:
+    conv + initDuration[R2](1)
+  else:
+    conv
+
+func floor*[R1, R2](d: Duration[R1]; To: typedesc[Duration[R2]]): Duration[R2] =
+  let conv = d.to(Duration[R2])
+  if conv > d:
+    conv - initDuration[R2](1)
+  else:
+    conv

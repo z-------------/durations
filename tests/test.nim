@@ -71,3 +71,20 @@ test "no implicit conversion unless enabled":
 test "initializers":
   check 42.seconds == initSeconds(42)
   check Seconds.init(42) == initSeconds(42)
+
+test "ceil":
+  check 3000.milliseconds.ceil(Seconds) == 3.seconds
+  check 3500.milliseconds.ceil(Seconds) == 4.seconds
+
+  type Weird = Duration[initRatio(2, 3)]
+  check 500.milliseconds.ceil(Weird) == Weird.init(1)
+  check 700.milliseconds.ceil(Weird) == Weird.init(2)
+
+test "floor":
+  check 3000.milliseconds.floor(Seconds) == 3.seconds
+  check 3500.milliseconds.floor(Seconds) == 3.seconds
+
+  type Weird = Duration[initRatio(2, 3)]
+  check 500.milliseconds.floor(Weird) == Weird.init(0)
+  check 700.milliseconds.floor(Weird) == Weird.init(1)
+
