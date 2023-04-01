@@ -12,6 +12,7 @@ func getCountDeca(d: Decaseconds): Count =
 test "can define custom units":
   check initDecaseconds(50) == initSeconds(50 * 10)
   check 123.decaseconds == initDecaseconds(123)
+  check Decaseconds.init(42) == 42.decaseconds
   check $initDecaseconds(42) == "42 decaseconds"
 
   check 2.hectoseconds == 20.decaseconds

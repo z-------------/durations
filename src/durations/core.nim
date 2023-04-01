@@ -25,6 +25,9 @@ type
 func initDuration*[R: static[Ratio]](count: Count): Duration[R] =
   result.count = count
 
+func init*(D: typedesc[Duration]; count: Count): D =
+  result.count = count
+
 func initRatio*(num, denom: Count): Ratio =
   num // denom
 
