@@ -20,7 +20,6 @@ import std/[
   genasts,
   macros,
   rationals,
-  sequtils,
   strutils,
   tables,
 ]
