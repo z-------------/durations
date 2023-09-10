@@ -21,13 +21,14 @@ export rationals.`*`
 type
   Count* = int64
   Ratio* = Rational[Count]
-  Duration*[R: static[Ratio]] = distinct Count
+  Duration*[R: static[Ratio]] = object
+    count*: Count
 
 func initDuration*[R: static[Ratio]](count: Count): Duration[R] =
-  Duration[R](count)
+  Duration[R](count: count)
 
 func init*(D: typedesc[Duration]; count: Count): D =
-  D(count)
+  D(count: count)
 
 func `//`*(num, denom: Count): Ratio =
   initRational(num, denom)
@@ -35,19 +36,16 @@ func `//`*(num, denom: Count): Ratio =
 func `$`*[R](d: Duration[R]): string =
   "Duration[" & $R & "](" & $d.count & ")"
 
-template count*(d: Duration): Count =
-  Count(d)
-
 func toCount(x: Ratio): Count =
   # Same as std/rationals.toInt
   x.num div x.den
 
 func to*[R1, R2](d: Duration[R1]; outType: typedesc[Duration[R2]]): Duration[R2] =
   when R1 == R2:
-    typeof(result)(d.count)
+    typeof(result)(count: d.count)
   else:
     const conversion = R1 / R2.Ratio # ???
-    typeof(result)((d.count * conversion).toCount)
+    typeof(result)(count: (d.count * conversion).toCount)
 
 template operatorImpl[R1, R2](d1: Duration[R1]; d2: Duration[R2]; expression: untyped; wrap = false): untyped =
   const commonRatio =
