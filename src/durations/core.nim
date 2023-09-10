@@ -24,9 +24,6 @@ type
   Duration*[R: static[Ratio]] = object
     count*: Count
 
-func initDuration*[R: static[Ratio]](count: Count): Duration[R] =
-  Duration[R](count: count)
-
 func init*(D: typedesc[Duration]; count: Count): D =
   D(count: count)
 
@@ -57,7 +54,7 @@ template operatorImpl[R1, R2](d1: Duration[R1]; d2: Duration[R2]; expression: un
     a {.inject.} = d1.to(Duration[commonRatio]).count
     b {.inject.} = d2.to(Duration[commonRatio]).count
   when wrap:
-    initDuration[commonRatio](expression)
+    Duration[commonRatio](count: expression)
   else:
     expression
 
@@ -71,19 +68,19 @@ func `-`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): auto =
   arithImpl(d1, d2, a - b)
 
 func `*`*[R](d: Duration[R]; n: SomeInteger): Duration[R] =
-  initDuration[R](d.count * n)
+  Duration[R](count: d.count * n)
 
 func `*`*[R; N: SomeFloat](d: Duration[R]; n: N): Duration[R] =
-  initDuration[R]((d.count.N * n).Count)
+  Duration[R](count: (d.count.N * n).Count)
 
 func `*`*[R](n: SomeNumber; d: Duration[R]): Duration[R] =
   d * n
 
 func `div`*[R](d: Duration[R]; n: SomeInteger): Duration[R] =
-  initDuration[R](d.count div n)
+  Duration[R](count: d.count div n)
 
 func `div`*[R; N: SomeFloat](d: Duration[R]; n: N): Duration[R] =
-  initDuration[R]((d.count.N / n).Count)
+  Duration[R](count: (d.count.N / n).Count)
 
 func `div`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): Count =
   operatorImpl(d1, d2, a div b)
@@ -103,13 +100,13 @@ func `<`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): bool =
 func ceil*[R1, R2](d: Duration[R1]; To: typedesc[Duration[R2]]): Duration[R2] =
   let conv = d.to(Duration[R2])
   if conv < d:
-    conv + initDuration[R2](1)
+    result = conv + Duration[R2](count: 1)
   else:
-    conv
+    result = conv
 
 func floor*[R1, R2](d: Duration[R1]; To: typedesc[Duration[R2]]): Duration[R2] =
   let conv = d.to(Duration[R2])
   if conv > d:
-    conv - initDuration[R2](1)
+    result = conv - Duration[R2](count: 1)
   else:
-    conv
+    result = conv

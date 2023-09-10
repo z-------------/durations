@@ -24,9 +24,6 @@ import std/[
   tables,
 ]
 
-template getInitName(typeName: NimNode): NimNode =
-  ident("init" & $typeName)
-
 func generateConst(ratioName: NimNode; ratio: Ratio): NimNode =
   genAst(ratioName, ratio):
     const ratioName* = ratio
@@ -35,16 +32,11 @@ func generateType(typeName, ratioName: NimNode): NimNode =
   genAst(typeName, ratioName):
     type typeName* = Duration[ratioName]
 
-func generateInit(typeName, ratioName: NimNode): NimNode =
-  genAst(name = getInitName(typeName), typeName, ratioName):
-    func name*(count {.inject.}: Count): typeName =
-      initDuration[ratioName](count)
-
 func generateInitSugar(typeName: NimNode): NimNode =
   let name = ident(($typeName).toLowerAscii)
-  genAst(name, initName = getInitName(typeName), typeName):
+  genAst(name, typeName):
     template name*(count {.inject.}: Count): typeName =
-      initName(count)
+      init(typeName, count)
 
 func generateDollar(typeName: NimNode): NimNode =
   let typeNameLower = newLit(($typeName).toLowerAscii)
@@ -72,16 +64,12 @@ when defined(durationsImplicitConversion):
         result.add generateImplicitConverter(ratioName, name1)
     units[ratio] = ratioName
 
-func generateInits(typeName, ratioName: NimNode): seq[NimNode] =
-  result.add generateInit(typeName, ratioName)
-  result.add generateInitSugar(typeName)
-
 macro unit*(ratioName, typeName: untyped; ratio: static[Ratio]): untyped =
   result = newStmtList()
 
   result.add generateConst(ratioName, ratio)
   result.add generateType(typeName, ratioName)
-  result.add generateInits(typeName, ratioName)
+  result.add generateInitSugar(typeName)
   result.add generateDollar(typeName)
   when defined(durationsImplicitConversion):
     result.add generateImplicitConverters(ratio, ratioName)

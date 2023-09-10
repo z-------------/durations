@@ -62,15 +62,15 @@ test "dollars":
   check $5.seconds == "5 seconds"
   check $5.milliseconds == "5 milliseconds"
   check $2.hours == "2 hours"
-  check $initDuration[Milli](5) == "5 milliseconds"
-  check $initDuration[22 // 7](5) == "Duration[22/7](5)"
+  check $Duration[Milli].init(5) == "5 milliseconds"
+  check $Duration[22 // 7].init(5) == "Duration[22/7](5)"
 
 test "no implicit conversion unless enabled":
   check not compiles(getCountMilli(5.seconds))
 
 test "initializers":
-  check 42.seconds == initSeconds(42)
-  check Seconds.init(42) == initSeconds(42)
+  check 42.seconds == Seconds.init(42)
+  check Seconds.init(42) == Seconds.init(42)
 
 test "ceil":
   check 3000.milliseconds.ceil(Seconds) == 3.seconds
