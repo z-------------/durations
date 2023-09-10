@@ -67,14 +67,14 @@ echo 1.seconds + 250.milliseconds # prints "1250 milliseconds"
 
 ## Custom units
 
-Duration types are implemented as instantiations of the generic type `Duration[R: static[Ratio]]`, where `Ratio` is a rational number. For example, `Seconds` is `Duration[initRatio(1, 1)]` and `Milliseconds` is `Duration[initRatio(1, 1000)]`.
+Duration types are implemented as instantiations of the generic type `Duration[R: static[Ratio]]`, where `Ratio` is a rational number. For example, `Seconds` is `Duration[1 // 1]` and `Milliseconds` is `Duration[1 // 1000]`.
 
 The library comes with several units built in, including `Nanoseconds` and `Days`.
 
 You can define a custom duration type with:
 
 ```nim
-unit Mega, Megaseconds, initRatio(1_000_000, 1)
+unit Mega, Megaseconds, 1_000_000 // 1
 ```
 
 This generates:

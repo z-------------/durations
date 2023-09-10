@@ -63,7 +63,7 @@ test "dollars":
   check $5.milliseconds == "5 milliseconds"
   check $2.hours == "2 hours"
   check $initDuration[Milli](5) == "5 milliseconds"
-  check $initDuration[initRatio(22, 7)](5) == "Duration[22/7](5)"
+  check $initDuration[22 // 7](5) == "Duration[22/7](5)"
 
 test "no implicit conversion unless enabled":
   check not compiles(getCountMilli(5.seconds))
@@ -76,7 +76,7 @@ test "ceil":
   check 3000.milliseconds.ceil(Seconds) == 3.seconds
   check 3500.milliseconds.ceil(Seconds) == 4.seconds
 
-  type Weird = Duration[initRatio(2, 3)]
+  type Weird = Duration[2 // 3]
   check 500.milliseconds.ceil(Weird) == Weird.init(1)
   check 700.milliseconds.ceil(Weird) == Weird.init(2)
 
@@ -84,7 +84,7 @@ test "floor":
   check 3000.milliseconds.floor(Seconds) == 3.seconds
   check 3500.milliseconds.floor(Seconds) == 3.seconds
 
-  type Weird = Duration[initRatio(2, 3)]
+  type Weird = Duration[2 // 3]
   check 500.milliseconds.floor(Weird) == Weird.init(0)
   check 700.milliseconds.floor(Weird) == Weird.init(1)
 

@@ -29,8 +29,8 @@ func initDuration*[R: static[Ratio]](count: Count): Duration[R] =
 func init*(D: typedesc[Duration]; count: Count): D =
   D(count)
 
-func initRatio*(num, denom: Count): Ratio =
-  num // denom
+func `//`*(num, denom: Count): Ratio =
+  initRational(num, denom)
 
 func `$`*[R](d: Duration[R]): string =
   "Duration[" & $R & "](" & $d.count & ")"

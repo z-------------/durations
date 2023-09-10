@@ -3,8 +3,8 @@ import durations
 import durations/unitdef
 import ./funcs
 
-unit Deca, Decaseconds, initRatio(10, 1)
-unit Hecto, Hectoseconds, initRatio(100, 1)
+unit Deca, Decaseconds, 10 // 1
+unit Hecto, Hectoseconds, 100 // 1
 
 func getCountDeca(d: Decaseconds): Count =
   d.count
