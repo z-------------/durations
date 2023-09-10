@@ -39,12 +39,12 @@ sleep(timeToSleepInMs)
 compilation fails with a type mismatch error:
 
 ```
-Error: type mismatch: got <Milliseconds>
-but expected one of:
-proc sleep(duration: Microseconds)
-  first type mismatch at position: 1
-  required type for duration: Microseconds
-  but expression 'initMilliseconds(1000)' is of type: Milliseconds
+Error: type mismatch
+Expression: sleep(timeToSleepInMs)
+  [1] timeToSleepInMs: Milliseconds
+
+Expected one of (first mismatch at [position]):
+[1] proc sleep(duration: Microseconds)
 ```
 
 To be able to call the procedure, you must ensure your arguments are in the correct units. The following compiles and sleeps for the correct amount of time:
@@ -80,7 +80,7 @@ unit Mega, Megaseconds, 1_000_000 // 1
 This generates:
 
 * a concrete `Duration` type with the specified ratio
-* `initMegaseconds(n)` and `n.megaseconds` initializers
+* `n.megaseconds` initializer
 * `const Mega: Ratio` set to the specified ratio
 * implicit converters as described above if enabled
 
