@@ -71,7 +71,7 @@ Duration types are implemented as instantiations of the generic type `Duration[R
 
 The library comes with several units built in, including `Nanoseconds` and `Days`.
 
-You can define a custom duration type with:
+You can define a custom duration type like this:
 
 ```nim
 unit Mega, Megaseconds, 1_000_000 // 1
@@ -79,9 +79,9 @@ unit Mega, Megaseconds, 1_000_000 // 1
 
 This generates:
 
-* a concrete `Duration` type with the specified ratio
+* `const Mega: Ratio = 1_000_000 // 1`
+* `type Megaseconds = Duration[Mega]`
 * `n.megaseconds` initializer
-* `const Mega: Ratio` set to the specified ratio
 * implicit converters as described above if enabled
 
 ## License
