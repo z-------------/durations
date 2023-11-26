@@ -98,6 +98,10 @@ func `<`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): bool =
   operatorImpl(d1, d2, a < b)
 
 func ceil*[R1, R2](d: Duration[R1]; To: typedesc[Duration[R2]]): Duration[R2] =
+  ## Rounds `d` up to the specified unit.
+  runnableExamples:
+    import pkg/durations
+    assert 3500.milliseconds.ceil(Seconds) == 4.seconds
   let conv = d.to(Duration[R2])
   if conv < d:
     result = conv + Duration[R2](count: 1)
@@ -105,6 +109,10 @@ func ceil*[R1, R2](d: Duration[R1]; To: typedesc[Duration[R2]]): Duration[R2] =
     result = conv
 
 func floor*[R1, R2](d: Duration[R1]; To: typedesc[Duration[R2]]): Duration[R2] =
+  ## Rounds `d` down to the specified unit.
+  runnableExamples:
+    import pkg/durations
+    assert 3500.milliseconds.floor(Seconds) == 3.seconds
   let conv = d.to(Duration[R2])
   if conv > d:
     result = conv - Duration[R2](count: 1)
