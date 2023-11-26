@@ -30,8 +30,8 @@ func init*(D: typedesc[Duration]; count: Count): D =
 func `//`*(num, denom: Count): Ratio =
   initRational(num, denom)
 
-func `$`*[R](d: Duration[R]): string =
-  "Duration[" & $R & "](" & $d.count & ")"
+func `$`*(d: Duration): string =
+  "Duration[" & $d.R & "](" & $d.count & ")"
 
 func toCount(x: Ratio): Count =
   # Same as std/rationals.toInt
