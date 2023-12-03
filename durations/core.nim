@@ -56,7 +56,7 @@ func to*[R1, R2](d: Duration[R1]; outType: typedesc[Duration[R2]]): Duration[R2]
     assert 1.seconds.to(Milliseconds) == 1000.milliseconds
 
   when R1 == R2:
-    Duration[R2](count: d.count)
+    d
   else:
     const conversion = R1 / R2.Ratio # ???
     Duration[R2](count: (d.count * conversion).toCount)
