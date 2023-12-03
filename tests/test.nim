@@ -8,9 +8,6 @@ template checkTypeAndCount(expr, expected: untyped) =
   check d.count == expected.count
   check d == expected
 
-template `=~`(a, b: float): bool =
-  abs(a - b) < 0.000001
-
 test "arithmetic":
   checkTypeAndCount(6.seconds + 9.seconds, 15.seconds)
   checkTypeAndCount(5.seconds + 100.milliseconds, 5100.milliseconds)
@@ -27,7 +24,7 @@ test "arithmetic":
   checkTypeAndCount(21.seconds div 4, 5.seconds)
   checkTypeAndCount(100.milliseconds div 3.3, 30.milliseconds)
   check 100.seconds div 33.milliseconds == 3030
-  check 100.seconds / 33.milliseconds =~ 100_000 / 33
+  check 100.seconds / 33.milliseconds == 100_000 / 33
 
   checkTypeAndCount(1.hours + 59.minutes, (60 + 59).minutes)
 
