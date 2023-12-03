@@ -77,14 +77,14 @@ template arithImpl[R1, R2](d1: Duration[R1]; d2: Duration[R2]; expression: untyp
   operatorImpl(d1, d2, expression, true)
 
 func `+`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): auto =
-  ## Sums two durations, converting to higher precision when necessary.
+  ## Sums two durations, converting to higher precision if necessary.
   runnableExamples("--import:durations"):
     assert 1.seconds + 250.milliseconds == 1250.milliseconds
 
   arithImpl(d1, d2, a + b)
 
 func `-`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): auto =
-  ## Subtracts two durations, converting to higher precision when necessary.
+  ## Subtracts two durations, converting to higher precision if necessary.
   runnableExamples("--import:durations"):
     assert 1.seconds - 250.milliseconds == 750.milliseconds
 
@@ -98,7 +98,7 @@ func `*`*[R](d: Duration[R]; n: SomeInteger): Duration[R] =
   Duration[R](count: d.count * n)
 
 func `*`*[R; N: SomeFloat](d: Duration[R]; n: N): Duration[R] =
-  ## Multiplies a duration by a float, truncating when necessary.
+  ## Multiplies a duration by a float, truncating if necessary.
   runnableExamples("--import:durations"):
     assert 1000.seconds * 3.14159 == 3141.seconds
 
@@ -108,15 +108,31 @@ func `*`*[R](n: SomeNumber; d: Duration[R]): Duration[R] =
   d * n
 
 func `div`*[R](d: Duration[R]; n: SomeInteger): Duration[R] =
+  ## Divides a duration by an integer, truncating if necessary.
+  runnableExamples("--import:durations"):
+    assert 33.seconds div 10 == 3.seconds
+
   Duration[R](count: d.count div n)
 
 func `div`*[R; N: SomeFloat](d: Duration[R]; n: N): Duration[R] =
+  ## Divides a duration by a float, truncating if necessary.
+  runnableExamples("--import:durations"):
+    assert 100.seconds div 1.1 == 90.seconds
+
   Duration[R](count: (d.count.N / n).Count)
 
 func `div`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): Count =
+  ## Divides two durations, truncating if necessary.
+  runnableExamples("--import:durations"):
+    assert 10.seconds div 4.seconds == 2
+
   operatorImpl(d1, d2, a div b)
 
 func `/`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): float =
+  ## Divides two durations.
+  runnableExamples("--import:durations"):
+    assert 10.seconds / 4.seconds == 2.5
+
   operatorImpl(d1, d2, a.float / b.float)
 
 func `==`*[R1, R2](d1: Duration[R1]; d2: Duration[R2]): bool =
