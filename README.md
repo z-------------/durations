@@ -74,6 +74,8 @@ The library comes with several units built in, including `Nanoseconds` and `Days
 You can define a custom duration type like this:
 
 ```nim
+import pkg/durations/unitdef
+
 unit Mega, Megaseconds, 1_000_000 // 1
 ```
 
@@ -82,7 +84,7 @@ This generates:
 * `const Mega: Ratio = 1_000_000 // 1`
 * `type Megaseconds = Duration[Mega]`
 * `n.megaseconds` initializer
-* implicit converters as described above if enabled
+* Implicit converters as described above if enabled
 
 ## License
 
