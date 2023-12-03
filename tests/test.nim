@@ -31,6 +31,11 @@ test "arithmetic":
   checkTypeAndCount(1.seconds + 2.seconds + 3.seconds, 6.seconds)
   checkTypeAndCount(1.seconds + 250.milliseconds + 50.milliseconds, 1300.milliseconds)
 
+  block:
+    var d = 250.milliseconds
+    d += 5000.milliseconds
+    assert d == 5250.milliseconds
+
 test "comparisons":
   check 6.seconds != 5.seconds
   check 6.seconds > 5.seconds
@@ -71,7 +76,7 @@ test "no implicit conversion if not enabled":
 
 test "initializers":
   check 42.seconds == Seconds.init(42)
-  check Seconds.init(42) == Seconds.init(42)
+  check Seconds.init(42).count == 42
 
 test "ceil":
   check 3000.milliseconds.ceil(Seconds) == 3.seconds
