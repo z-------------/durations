@@ -28,6 +28,9 @@ test "arithmetic":
 
   checkTypeAndCount(1.hours + 59.minutes, (60 + 59).minutes)
 
+  checkTypeAndCount(1.seconds + 2.seconds + 3.seconds, 6.seconds)
+  checkTypeAndCount(1.seconds + 250.milliseconds + 50.milliseconds, 1300.milliseconds)
+
 test "comparisons":
   check 6.seconds != 5.seconds
   check 6.seconds > 5.seconds
