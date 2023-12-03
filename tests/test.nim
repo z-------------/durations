@@ -66,7 +66,7 @@ test "dollars":
   check $Duration[Milli].init(5) == "5 milliseconds"
   check $Duration[22 // 7].init(5) == "Duration[22/7](5)"
 
-test "no implicit conversion unless enabled":
+test "no implicit conversion if not enabled":
   check not compiles(getCountMilli(5.seconds))
 
 test "initializers":
