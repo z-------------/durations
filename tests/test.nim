@@ -6,6 +6,7 @@ template checkTypeAndCount(expr, expected: untyped) =
   let d = expr
   check d is typeof(expected)
   check d.count == expected.count
+  check d == expected
 
 template `=~`(a, b: float): bool =
   abs(a - b) < 0.000001
