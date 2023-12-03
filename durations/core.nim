@@ -113,8 +113,4 @@ func floor*[R1, R2](d: Duration[R1]; To: typedesc[Duration[R2]]): Duration[R2] =
   runnableExamples:
     import pkg/durations
     assert 3500.milliseconds.floor(Seconds) == 3.seconds
-  let conv = d.to(Duration[R2])
-  if conv > d:
-    result = conv - Duration[R2](count: 1)
-  else:
-    result = conv
+  d.to(Duration[R2])
