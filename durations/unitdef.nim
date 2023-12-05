@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-## This module contains the macros for defining new units. You don't need to
+## This module contains the macro for defining new units. You don't need to
 ## import it unless you want to define your own custom units.
 
 import ./core
@@ -45,7 +45,12 @@ func generateDollar(typeName: NimNode): NimNode =
       $d.count & ' ' & typeNameLower
 
 when defined(durationsImplicitConversion):
-  var units {.compileTime.}: Table[Ratio, NimNode]
+  import std/[
+    macrocache,
+    sequtils,
+  ]
+
+  const mcUnits = CacheTable"durationsImplicitConversionUnits"
 
   func generateConverter(name: NimNode; R1, R2: NimNode): NimNode =
     genAst(name, R1, R2):
@@ -57,12 +62,15 @@ when defined(durationsImplicitConversion):
     generateConverter(converterName, name1, name2)
 
   proc generateImplicitConverters(ratio: Ratio; ratioName: NimNode): seq[NimNode] =
-    for r1, name1 in units.pairs:
+    for r1Str, name1 in mcUnits.pairs:
+      let
+        split = r1Str.split('/').mapIt(it.parseInt.int64)
+        r1 = split[0] // split[1]
       if r1 >= ratio:
         result.add generateImplicitConverter(name1, ratioName)
       if ratio >= r1:
         result.add generateImplicitConverter(ratioName, name1)
-    units[ratio] = ratioName
+    mcUnits[$ratio] = ratioName
 
 macro unit*(ratioName, typeName: untyped; ratio: static[Ratio]): untyped =
   result = newStmtList()
