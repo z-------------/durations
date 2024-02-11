@@ -1,6 +1,6 @@
 # durations
 
-[![Pipeline status](https://gitlab.com/z-------------/durations/badges/master/pipeline.svg)](https://gitlab.com/z-------------/durations/pipelines)
+[![Test status](https://github.com/z-------------/durations/actions/workflows/test.yaml/badge.svg)](https://github.com/z-------------/durations/actions/workflows/test.yaml)
 
 Statically typed durations for Nim.
 
