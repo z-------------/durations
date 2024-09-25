@@ -58,13 +58,13 @@ func to*[R1, R2](d: Duration[R1]; outType: typedesc[Duration[R2]]): Duration[R2]
   when R1 == R2:
     d
   else:
-    const conversion = R1 / R2.Ratio # ???
+    const conversion = R1 / R2
     Duration[R2](count: (d.count * conversion).toCount)
 
 template operatorImpl[R1, R2](d1: Duration[R1]; d2: Duration[R2]; expression: untyped; wrap = false): untyped =
   const commonRatio =
-    when R2 < R1: R2.Ratio
-    else: R1.Ratio
+    when R2 < R1: R2
+    else: R1
   let
     a {.inject.} = d1.to(Duration[commonRatio]).count
     b {.inject.} = d2.to(Duration[commonRatio]).count
