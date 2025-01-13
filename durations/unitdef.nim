@@ -62,6 +62,7 @@ when defined(durationsImplicitConversion):
     generateConverter(converterName, name1, name2)
 
   proc generateImplicitConverters(ratio: Ratio; ratioName: NimNode): seq[NimNode] =
+    result = newSeq[NimNode]()
     for r1Str, name1 in mcUnits.pairs:
       let
         split = r1Str.split('/').mapIt(it.parseInt.int64)
